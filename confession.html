@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>致我的挚爱 王远妹</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #ffe6e6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 77, 77, 0.3);
+            animation: fadeIn 2s ease-in-out;
+        }
+        h1 {
+            color: #ff4d4d;
+            animation: colorChange 5s infinite alternate;
+        }
+        p {
+            color: #666;
+            line-height: 1.6;
+            opacity: 0;
+            animation: slideIn 1s forwards;
+        }
+        .heart {
+            color: #ff4d4d;
+            font-size: 2rem;
+            animation: pulse 1s infinite;
+        }
+        .name {
+            font-weight: bold;
+            color: #ff1a75;
+        }
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .floating-heart {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            animation: float 10s infinite linear;
+        }
+        .poem {
+            font-style: italic;
+            color: #8a2be2;
+            margin: 20px 0;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            animation-delay: 2.5s;
+        }
+        .stars {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: transparent;
+            box-shadow: 1744px 122px #FFF , 134px 1321px #FFF , 92px 859px #FFF;
+            animation: animStar 50s linear infinite;
+        }
+        @keyframes animStar {
+            from { transform: translateY(0px); }
+            to { transform: translateY(-2000px); }
+        }
+        .btn {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+            animation-delay: 3s;
+        }
+        .btn:hover {
+            background-color: #ff1a75;
+            transform: scale(1.1);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes colorChange {
+            0% { color: #ff4d4d; }
+            50% { color: #ff1a75; }
+            100% { color: #ff4d4d; }
+        }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100vh) rotate(720deg); }
+        }
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+        .music-control select, .music-control button {
+            margin: 5px;
+            padding: 5px;
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                max-width: 90%;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            p, .poem {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <audio id="bgMusic" loop>
+        <source src="" type="audio/mpeg">
+        您的浏览器不支持音频元素。
+    </audio>
+    <div class="stars"></div>
+    <div class="floating-hearts"></div>
+    <div class="container">
+        <h1>亲爱的<span class="name">王远妹</span>，我的挚爱</h1>
+        <p style="animation-delay: 0.5s;">从遇见你的那一刻起，我的世界就变得不一样了。</p>
+        <p style="animation-delay: 1s;">你的笑容如阳光般温暖，你的声音如天籁般动听。</p>
+        <p style="animation-delay: 1.5s;">我想牵着你的手，一起走过人生的每一个瞬间。</p>
+        <p style="animation-delay: 2s;">王远妹，我爱你，想和你共度余生。</p>
+        <p style="animation-delay: 3.5s; font-size: 0.8rem; color: #888;">
+            提示：点击右下角的"播放"按钮来听我为你准备的音乐 🎵
+        </p>
+        <div class="poem">
+            你是我生命中最美的诗行，<br>
+            是我心底最柔软的月光。<br>
+            无论晴天还是雨天，<br>
+            有你在身边，便是我最好的时光。
+        </div>
+        <div class="heart">❤️</div>
+        <button class="btn" id="acceptBtn">接受我的心意</button>
+    </div>
+
+    <div class="music-control">
+        <select id="musicSelect">
+            <option value="周杰伦-告白气球.mp3">告白气球 - 周杰伦</option>
+            <option value="周杰伦-七里香.mp3">七里香 - 周杰伦</option>
+        </select>
+        <button id="playPauseBtn">播放</button>
+        <span id="musicStatus"></span>
+    </div>
+
+    <script>
+        function createFloatingHearts() {
+            const container = document.querySelector('.floating-hearts');
+            const heartSymbols = ['❤️', '💖', '💗', '💓', '💘'];
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'floating-heart';
+                heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+                heart.style.left = `${Math.random() * 100}%`;
+                heart.style.animationDuration = `${Math.random() * 5 + 5}s`;
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                container.appendChild(heart);
+            }
+        }
+        createFloatingHearts();
+
+        const musicSelect = document.getElementById('musicSelect');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        const musicStatus = document.getElementById('musicStatus');
+
+        let isPlaying = false;
+
+        musicSelect.addEventListener('change', function() {
+            bgMusic.src = this.value;
+            musicStatus.textContent = '已选择: ' + this.options[this.selectedIndex].text;
+            isPlaying = false;
+            playPauseBtn.textContent = '播放';
+        });
+
+        playPauseBtn.addEventListener('click', function() {
+            if (isPlaying) {
+                bgMusic.pause();
+                this.textContent = '播放';
+                musicStatus.textContent = '已暂停';
+                isPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    this.textContent = '暂停';
+                    musicStatus.textContent = '正在播放: ' + musicSelect.options[musicSelect.selectedIndex].text;
+                    isPlaying = true;
+                }).catch(error => {
+                    musicStatus.textContent = '播放失败: ' + error.message;
+                });
+            }
+        });
+
+        // 初始化音乐
+        window.onload = function() {
+            bgMusic.src = musicSelect.value;
+            musicStatus.textContent = '准备就绪，请点击播放';
+        }
+
+        bgMusic.addEventListener('error', function() {
+            musicStatus.textContent = '音频加载失败，请检查文件';
+            playPauseBtn.textContent = '播放';
+            isPlaying = false;
+        });
+
+        // 创建星空效果
+        for (let i = 0; i < 200; i++) {
+            let star = document.createElement('div');
+            star.className = 'stars';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 50}s`;
+            document.body.appendChild(star);
+        }
+
+        // 音乐控制
+        musicSelect.addEventListener('change', function() {
+            bgMusic.src = this.value;
+            musicStatus.textContent = '已选择: ' + this.options[this.selectedIndex].text;
+        });
+
+        // 移除自动播放相关代码
+        // window.onload = function() {
+        //     var music = document.getElementById("bgMusic");
+        //     music.play();
+        // }
+    </script>
+</body>
+</html>
