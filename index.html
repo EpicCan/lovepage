@@ -177,7 +177,7 @@
         function createFloatingHearts() {
             const container = document.querySelector('.floating-hearts');
             const heartSymbols = ['❤️', '💖', '💗', '💓', '💘'];
-            for (let i = 0; i < 20; i++) {
+            for (let i = 0; i < 10; i++) { // 减少浮动心形的数量
                 const heart = document.createElement('div');
                 heart.className = 'floating-heart';
                 heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
@@ -233,7 +233,7 @@
         });
 
         // 创建星空效果
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < 100; i++) { // 减少星星的数量
             let star = document.createElement('div');
             star.className = 'stars';
             star.style.left = `${Math.random() * 100}%`;
@@ -253,6 +253,11 @@
         //     var music = document.getElementById("bgMusic");
         //     music.play();
         // }
+
+        const acceptBtn = document.getElementById('acceptBtn');
+        acceptBtn.addEventListener('click', function() {
+            alert('谢谢你的心意！在这个星空下，我愿意与你携手共度每一个晨昏，与你分享每一个梦想。你是我心中永恒的旋律，愿我们的爱如同这夜空中的星星，闪耀不息。');
+        });
     </script>
 </body>
 </html>
