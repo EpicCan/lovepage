@@ -224,6 +224,7 @@
         window.onload = function() {
             bgMusic.src = musicSelect.value;
             musicStatus.textContent = '准备就绪，请点击播放';
+            createFloatingHearts(); // 移动到这里，确保只在一次加载时创建
         }
 
         bgMusic.addEventListener('error', function() {
@@ -233,7 +234,7 @@
         });
 
         // 创建星空效果
-        for (let i = 0; i < 100; i++) { // 减少星星的数量
+        for (let i = 0; i < 50; i++) { // 减少星星的数量
             let star = document.createElement('div');
             star.className = 'stars';
             star.style.left = `${Math.random() * 100}%`;
